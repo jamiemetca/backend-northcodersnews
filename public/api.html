@@ -18,6 +18,62 @@
       <p class="subtitle">
         API Endpoints
       </p>
+      <p>
+        GET /api
+        <br> Serves an HTML page with documentation for all the available endpoints
+      </p>
+      <br>
+      <p>
+        GET /api/topics
+        <br> Get all the topics
+      </p>
+      <br>
+      <p>
+        GET /api/topics/:topic_slug/articles
+        <br> Return all the articles for a certain topic
+      </p>
+      <br>
+      <p>
+        POST /api/topics/:topic_slug/articles
+        <br> Add a new article to a topic. This route requires a JSON body with title and body key value pairs e.g: { "title":
+        "new article", "body": "This is my new article content"}
+      </p>
+      <br>
+      <p>
+        GET /api/articles
+        <br> Returns all the articles
+      </p>
+      <br>
+      <p>
+        GET /api/articles/:article_id
+        <br> Get an individual article
+      </p>
+      <br>
+      <p>
+        GET /api/articles/:article_id/comments
+        <br> Get all the comments for a individual article
+      </p>
+      <br>
+      <p>
+        POST /api/articles/:article_id/comments
+        <br> Add a new comment to an article. This route requires a JSON body with a comment key and value pair e.g: {"comment":
+        "This is my new comment"}
+      </p>
+      <br>
+      <p>
+        PUT /api/articles/:article_id
+        <br> Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down' e.g: /api/articles/:article_id?vote=up
+      </p>
+      <br>
+      <p>
+        PUT /api/comments/:comment_id
+        <br> Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down' e.g: /api/comments/:comment_id?vote=down
+      </p>
+      <br>
+      <p>
+        DELETE /api/comments/:comment_id
+        <br> Deletes a comment GET /api/users/:username Returns a JSON object with the profile data for the specified user.
+      </p>
     </div>
   </section>
 </body>

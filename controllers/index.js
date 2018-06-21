@@ -1,3 +1,8 @@
+const { getTopics } = require("./topic");
+const { getArticleByTopicSlug, postArticleByTopicSlug } = require("./article");
+
 module.exports = {
-  getEndPoints: require("./api")
+  getTopics,
+  getArticleByTopicSlug,
+  postArticleByTopicSlug
 };
