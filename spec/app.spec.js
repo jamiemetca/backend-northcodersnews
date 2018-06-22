@@ -21,7 +21,7 @@ describe("Test_NC_News", () => {
   });
 
   // TEST HOMEPAGE-------------------------
-  describe("/api", () => {
+  describe("/homepage", () => {
     it("GET all endpoints", () => {
       return request
         .get("/homepage")
@@ -66,7 +66,8 @@ describe("Test_NC_News", () => {
             "belongs_to",
             "votes",
             "created_by",
-            "__v"
+            "__v",
+            "count"
           );
           expect(res.body.articles[0].belongs_to).to.equal(
             `${topicsDocs[0].slug}`
@@ -79,13 +80,14 @@ describe("Test_NC_News", () => {
       return request
         .post(`/api/topics/${topicsDocs[1].slug}/articles`)
         .send({
-          title: "new article",
-          body: "This is my new article content",
+          title: "Moongoose or not to moongoose",
+          body: "A great man once said moongooes, and I agree",
           belongs_to: "cats",
           votes: 0
         })
         .expect(201)
         .then(res => {
+          // console.log(res.body);
           expect(res.body).to.have.keys("article");
           expect(res.body.article).to.have.keys(
             "_id",
@@ -96,7 +98,74 @@ describe("Test_NC_News", () => {
             "created_by",
             "__v"
           );
-          expect(res.body.article.title).to.equal(`${send.title}`);
+          expect(res.body.article.title).to.equal(
+            "Moongoose or not to moongoose"
+          );
+        });
+    });
+  });
+  // Articles-------------------------
+  describe("/api/articles", () => {
+    it("GET returns articles and status 200", () => {
+      return request
+        .get("/api/articles")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.have.keys("articles");
+          expect(res.body.articles.length).to.equal(articlesDocs.length);
+          expect(res.body.articles[0]).to.have.keys(
+            "_id",
+            "title",
+            "body",
+            "created_by",
+            "belongs_to",
+            "votes",
+            "__v",
+            "comments"
+          );
+          expect(articlesDocs[0]._id.equals(res.body.articles[0]._id));
+        });
+    });
+  });
+  describe("/api/articles/:article_id", () => {
+    it("GET returns articles with aritcle_id", () => {
+      return request
+        .get(`/api/articles/${articlesDocs[2]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.have.keys("articles");
+          expect(res.body.articles[0]).to.have.keys(
+            "_id",
+            "title",
+            "body",
+            "created_by",
+            "belongs_to",
+            "votes",
+            "__v"
+          );
+          expect(articlesDocs[2]._id.equals(res.body.articles._id));
+        });
+    });
+  });
+  describe("/api/articles/:article_id/comments", () => {
+    it.only("Get returns comments for specified article", () => {
+      return request
+        .get(`/api/articles/${articlesDocs[2]._id}/comments`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.have.keys("comments");
+          expect(res.body.comments[0]).to.have.keys(
+            "_id",
+            "body",
+            "belongs_to",
+            "created_by",
+            "votes",
+            "created_at",
+            "__v"
+          );
+          res.body.comments.forEach(comment => {
+            expect(comment.belongs_to).to.equal(`${articlesDocs[2]._id}`);
+          });
         });
     });
   });

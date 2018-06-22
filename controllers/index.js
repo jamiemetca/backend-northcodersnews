@@ -1,8 +1,18 @@
 const { getTopics } = require("./topic");
-const { getArticleByTopicSlug, postArticleByTopicSlug } = require("./article");
+const {
+  getArticleByTopicSlug,
+  postArticleByTopicSlug,
+  getArticles,
+  getArticlesById
+} = require("./article");
+const { getCommentsByArticleId } = require("./comment");
 
 module.exports = {
   getTopics,
   getArticleByTopicSlug,
-  postArticleByTopicSlug
+  postArticleByTopicSlug,
+  getTopics,
+  getArticles,
+  getArticlesById,
+  getCommentsByArticleId
 };

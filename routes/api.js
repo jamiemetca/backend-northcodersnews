@@ -1,5 +1,6 @@
 const apiRouter = require("express").Router();
 const { topicRouter } = require("./topic");
+const { articleRouter } = require("./article");
 
 apiRouter.get("/", (req, res, next) => {
   res.sendFile(
@@ -8,5 +9,6 @@ apiRouter.get("/", (req, res, next) => {
 });
 
 apiRouter.use("/topics", topicRouter);
+apiRouter.use("/articles", articleRouter);
 
 module.exports = { apiRouter };
