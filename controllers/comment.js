@@ -23,4 +23,19 @@ const getCommentsByArticleId = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getCommentsByArticleId };
+const postCommentByArticleId = (req, res, next) => {
+  const { body, created_by } = req.body;
+  const { article_id: belongs_to } = req.params;
+  const comment = new Comment({
+    body,
+    belongs_to,
+    created_by
+  });
+  Promise.all([comment.save()])
+    .then(comment => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+module.exports = { getCommentsByArticleId, postCommentByArticleId };

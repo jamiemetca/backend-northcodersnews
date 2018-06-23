@@ -87,7 +87,6 @@ describe("Test_NC_News", () => {
         })
         .expect(201)
         .then(res => {
-          // console.log(res.body);
           expect(res.body).to.have.keys("article");
           expect(res.body.article).to.have.keys(
             "_id",
@@ -149,7 +148,7 @@ describe("Test_NC_News", () => {
   });
   // Comments-------------------------------------------------
   describe("/api/articles/:article_id/comments", () => {
-    it.only("Get returns comments for specified article", () => {
+    it("Get returns comments for specified article", () => {
       return request
         .get(`/api/articles/${articlesDocs[2]._id}/comments`)
         .expect(200)
@@ -167,6 +166,31 @@ describe("Test_NC_News", () => {
           res.body.comments.forEach(comment => {
             expect(comment.belongs_to).to.equal(`${articlesDocs[2]._id}`);
           });
+        });
+    });
+    it("POST a comment linked to specific artilce", () => {
+      return request
+        .post(`/api/articles/${articlesDocs[1]._id}/comments`)
+        .send({
+          body: "I used to be a fan but now I'm an air conditioner",
+          belongs_to: `${articlesDocs[1]._id}`,
+          created_by: `${usersDocs[0]._id}`
+        })
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.have.keys("comment");
+          expect(res.body.comment[0]).to.have.keys(
+            "_id",
+            "body",
+            "belongs_to",
+            "created_by",
+            "votes",
+            "created_at",
+            "__v"
+          );
+          expect(res.body.comment[0].body).to.equal(
+            "I used to be a fan but now I'm an air conditioner"
+          );
         });
     });
   });

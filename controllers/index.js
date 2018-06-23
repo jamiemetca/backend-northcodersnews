@@ -5,7 +5,7 @@ const {
   getArticles,
   getArticlesById
 } = require("./article");
-const { getCommentsByArticleId } = require("./comment");
+const { getCommentsByArticleId, postCommentByArticleId } = require("./comment");
 
 module.exports = {
   getTopics,
@@ -14,5 +14,6 @@ module.exports = {
   getTopics,
   getArticles,
   getArticlesById,
-  getCommentsByArticleId
+  getCommentsByArticleId,
+  postCommentByArticleId
 };
