@@ -249,4 +249,22 @@ describe("Test_NC_News", () => {
         });
     });
   });
+  describe("/api/users/:username", () => {
+    it("GET user by username", () => {
+      return request
+        .get(`/api/users/${usersDocs[1].username}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.have.keys("user");
+          expect(res.body.user).to.have.keys(
+            "_id",
+            "username",
+            "name",
+            "avatar_url",
+            "__v"
+          );
+          expect(res.body.user._id).to.equal(`${usersDocs[1]._id}`);
+        });
+    });
+  });
 });

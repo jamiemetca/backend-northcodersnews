@@ -12,6 +12,7 @@ const {
   updateVoteByCommentId,
   deleteCommentById
 } = require("./comment");
+const { getUserByUsername } = require("./user");
 
 module.exports = {
   getTopics,
@@ -24,5 +25,6 @@ module.exports = {
   postCommentByArticleId,
   updateVoteByArticleId,
   updateVoteByCommentId,
-  deleteCommentById
+  deleteCommentById,
+  getUserByUsername
 };
