@@ -84,9 +84,29 @@ const getArticlesById = (req, res, next) => {
     .catch(next);
 };
 
+const updateVoteByArticleId = (req, res, next) => {
+  const { article_id: _id } = req.params;
+  const { vote } = req.query;
+  Article.findById({ _id })
+    .lean()
+    .then(article => {
+      let updatedVotes = article.votes;
+      vote === "up" ? updatedVotes++ : updatedVotes--;
+      return Article.findByIdAndUpdate({ _id }, { votes: updatedVotes });
+    })
+    .then(() => {
+      return Article.findById({ _id });
+    })
+    .then(article => {
+      res.status(201).send({ article });
+    })
+    .catch(next);
+};
+
 module.exports = {
   getArticleByTopicSlug,
   postArticleByTopicSlug,
   getArticles,
-  getArticlesById
+  getArticlesById,
+  updateVoteByArticleId
 };

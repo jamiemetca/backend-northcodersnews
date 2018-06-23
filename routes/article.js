@@ -3,12 +3,17 @@ const {
   getArticles,
   getArticlesById,
   getCommentsByArticleId,
-  postCommentByArticleId
+  postCommentByArticleId,
+  updateVoteByArticleId
 } = require("../controllers");
 
 articleRouter.route("/").get(getArticles);
 
-articleRouter.route("/:article_id").get(getArticlesById);
+articleRouter
+  .route("/:article_id")
+  .get(getArticlesById)
+  .put(updateVoteByArticleId);
+
 articleRouter
   .route("/:article_id/comments")
   .get(getCommentsByArticleId)

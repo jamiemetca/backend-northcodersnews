@@ -145,6 +145,25 @@ describe("Test_NC_News", () => {
           expect(articlesDocs[2]._id.equals(res.body.articles._id));
         });
     });
+    it("PUT increment the votes on an article by 1", () => {
+      return request
+        .put(`/api/articles/${articlesDocs[1]._id}?vote=up`)
+        .expect(201)
+        .then(res => {
+          // console.log(res.body);
+          expect(res.body).to.have.keys("article");
+          expect(res.body.article.votes).to.equal(articlesDocs[1].votes + 1);
+        });
+    });
+    it("PUT decrement the votes on an article by 1", () => {
+      return request
+        .put(`/api/articles/${articlesDocs[1]._id}?vote=down`)
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.have.keys("article");
+          expect(res.body.article.votes).to.equal(articlesDocs[1].votes - 1);
+        });
+    });
   });
   // Comments-------------------------------------------------
   describe("/api/articles/:article_id/comments", () => {

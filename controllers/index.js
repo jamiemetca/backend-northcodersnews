@@ -3,7 +3,8 @@ const {
   getArticleByTopicSlug,
   postArticleByTopicSlug,
   getArticles,
-  getArticlesById
+  getArticlesById,
+  updateVoteByArticleId
 } = require("./article");
 const { getCommentsByArticleId, postCommentByArticleId } = require("./comment");
 
@@ -15,5 +16,6 @@ module.exports = {
   getArticles,
   getArticlesById,
   getCommentsByArticleId,
-  postCommentByArticleId
+  postCommentByArticleId,
+  updateVoteByArticleId
 };
