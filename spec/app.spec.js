@@ -5,6 +5,7 @@ const { expect } = require("chai");
 const testData = require("../seed/testData");
 const seedDB = require("../seed/seed");
 const mongoose = require("mongoose");
+const { Comment } = require("../models");
 
 describe("Test_NC_News", () => {
   let topicsDocs;
@@ -148,7 +149,7 @@ describe("Test_NC_News", () => {
     it("PUT increment the votes on an article by 1", () => {
       return request
         .put(`/api/articles/${articlesDocs[1]._id}?vote=up`)
-        .expect(201)
+        .expect(200)
         .then(res => {
           // console.log(res.body);
           expect(res.body).to.have.keys("article");
@@ -158,7 +159,7 @@ describe("Test_NC_News", () => {
     it("PUT decrement the votes on an article by 1", () => {
       return request
         .put(`/api/articles/${articlesDocs[1]._id}?vote=down`)
-        .expect(201)
+        .expect(200)
         .then(res => {
           expect(res.body).to.have.keys("article");
           expect(res.body.article.votes).to.equal(articlesDocs[1].votes - 1);
@@ -217,7 +218,7 @@ describe("Test_NC_News", () => {
     it("PUT increments votes count of comments by 1", () => {
       return request
         .put(`/api/comments/${commentsDocs[3]._id}?vote=up`)
-        .expect(201)
+        .expect(200)
         .then(res => {
           expect(res.body).to.have.keys("comment");
           expect(res.body.comment.votes).to.equal(commentsDocs[3].votes + 1);
@@ -226,10 +227,25 @@ describe("Test_NC_News", () => {
     it("PUT decrements votes count of comments by 1", () => {
       return request
         .put(`/api/comments/${commentsDocs[3]._id}?vote=down`)
-        .expect(201)
+        .expect(200)
         .then(res => {
           expect(res.body).to.have.keys("comment");
           expect(res.body.comment.votes).to.equal(commentsDocs[3].votes - 1);
+        });
+    });
+  });
+  describe("/api/comments/:comment_id", () => {
+    it("DELETE deletes comment by comment_id", () => {
+      const _idToBeDeleted = commentsDocs[0]._id;
+      return request
+        .del(`/api/comments/${_idToBeDeleted}`)
+        .expect(204)
+        .then(res => {
+          expect(res.body).to.be.empty;
+          return Comment.find();
+        })
+        .then(comments => {
+          expect(comments.length).to.equal(commentsDocs.length - 1);
         });
     });
   });

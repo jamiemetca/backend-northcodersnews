@@ -9,7 +9,8 @@ const {
 const {
   getCommentsByArticleId,
   postCommentByArticleId,
-  updateVoteByCommentId
+  updateVoteByCommentId,
+  deleteCommentById
 } = require("./comment");
 
 module.exports = {
@@ -22,5 +23,6 @@ module.exports = {
   getCommentsByArticleId,
   postCommentByArticleId,
   updateVoteByArticleId,
-  updateVoteByCommentId
+  updateVoteByCommentId,
+  deleteCommentById
 };

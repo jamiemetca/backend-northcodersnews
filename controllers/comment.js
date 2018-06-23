@@ -52,7 +52,17 @@ const updateVoteByCommentId = (req, res, next) => {
       return Comment.findById({ _id });
     })
     .then(comment => {
-      res.status(201).send({ comment });
+      res.status(200).send({ comment });
+    })
+    .catch(next);
+};
+
+const deleteCommentById = (req, res, next) => {
+  const { comment_id: _id } = req.params;
+  Comment.findByIdAndRemove({ _id })
+    .lean()
+    .then(comment => {
+      res.status(204).send({ comment });
     })
     .catch(next);
 };
@@ -60,5 +70,6 @@ const updateVoteByCommentId = (req, res, next) => {
 module.exports = {
   getCommentsByArticleId,
   postCommentByArticleId,
-  updateVoteByCommentId
+  updateVoteByCommentId,
+  deleteCommentById
 };
