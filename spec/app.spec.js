@@ -104,7 +104,7 @@ describe("Test_NC_News", () => {
         });
     });
   });
-  // Articles-------------------------
+  // Articles--------------------------------------------------
   describe("/api/articles", () => {
     it("GET returns articles and status 200", () => {
       return request
@@ -147,6 +147,7 @@ describe("Test_NC_News", () => {
         });
     });
   });
+  // Comments-------------------------------------------------
   describe("/api/articles/:article_id/comments", () => {
     it.only("Get returns comments for specified article", () => {
       return request

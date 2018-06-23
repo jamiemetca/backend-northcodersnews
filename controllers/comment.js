@@ -1,26 +1,24 @@
-const getCommentsByArticleId = (req, res, next) => {
-  console.log(req.params, "<<<<<<<<");
-};
+const { Comment } = require("../models");
 
-const getArticleByTopicSlug = (req, res, next) => {
-  const { topic_slug: belongs_to } = req.params;
-  Article.find({ belongs_to })
-    .populate("users")
+const getCommentsByArticleId = (req, res, next) => {
+  const { article_id: belongs_to } = req.params;
+  Comment.find({ belongs_to })
+    .populate("created_by", "username")
     .lean()
-    .then(articles => {
+    .then(comments => {
       return Promise.all([
-        articles,
-        ...articles.map(article => {
-          return Comment.count({ belongs_to: article._id });
+        comments,
+        ...comments.map(comment => {
+          return comment.created_by.username;
         })
       ]);
     })
-    .then(([articles, ...countArr]) => {
-      articles.map((article, index) => {
-        article.count = countArr[index];
-        return article;
+    .then(([comments, ...usernameArr]) => {
+      comments.map((comment, index) => {
+        comment.created_by = usernameArr[index];
+        return comment;
       });
-      res.send({ articles });
+      res.send({ comments });
     })
     .catch(next);
 };

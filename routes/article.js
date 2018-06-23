@@ -1,5 +1,4 @@
 const articleRouter = require("express").Router();
-const { commentRouter } = require("./comment");
 const {
   getArticles,
   getArticlesById,
