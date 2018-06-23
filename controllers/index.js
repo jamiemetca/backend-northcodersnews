@@ -6,7 +6,11 @@ const {
   getArticlesById,
   updateVoteByArticleId
 } = require("./article");
-const { getCommentsByArticleId, postCommentByArticleId } = require("./comment");
+const {
+  getCommentsByArticleId,
+  postCommentByArticleId,
+  updateVoteByCommentId
+} = require("./comment");
 
 module.exports = {
   getTopics,
@@ -17,5 +21,6 @@ module.exports = {
   getArticlesById,
   getCommentsByArticleId,
   postCommentByArticleId,
-  updateVoteByArticleId
+  updateVoteByArticleId,
+  updateVoteByCommentId
 };

@@ -165,7 +165,6 @@ describe("Test_NC_News", () => {
         });
     });
   });
-  // Comments-------------------------------------------------
   describe("/api/articles/:article_id/comments", () => {
     it("Get returns comments for specified article", () => {
       return request
@@ -210,6 +209,27 @@ describe("Test_NC_News", () => {
           expect(res.body.comment[0].body).to.equal(
             "I used to be a fan but now I'm an air conditioner"
           );
+        });
+    });
+  });
+  // Comments-------------------------------------------------
+  describe("/api/comments/:comment_id?vote=up", () => {
+    it("PUT increments votes count of comments by 1", () => {
+      return request
+        .put(`/api/comments/${commentsDocs[3]._id}?vote=up`)
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.have.keys("comment");
+          expect(res.body.comment.votes).to.equal(commentsDocs[3].votes + 1);
+        });
+    });
+    it("PUT decrements votes count of comments by 1", () => {
+      return request
+        .put(`/api/comments/${commentsDocs[3]._id}?vote=down`)
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.have.keys("comment");
+          expect(res.body.comment.votes).to.equal(commentsDocs[3].votes - 1);
         });
     });
   });

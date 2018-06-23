@@ -38,4 +38,27 @@ const postCommentByArticleId = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getCommentsByArticleId, postCommentByArticleId };
+const updateVoteByCommentId = (req, res, next) => {
+  const { comment_id: _id } = req.params;
+  const { vote } = req.query;
+  Comment.findById({ _id })
+    .lean()
+    .then(comment => {
+      let updatedVotes = comment.votes;
+      vote === "up" ? updatedVotes++ : updatedVotes--;
+      return Comment.findByIdAndUpdate({ _id }, { votes: updatedVotes });
+    })
+    .then(() => {
+      return Comment.findById({ _id });
+    })
+    .then(comment => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getCommentsByArticleId,
+  postCommentByArticleId,
+  updateVoteByCommentId
+};
