@@ -21,14 +21,17 @@ describe("Test_NC_News", () => {
     mongoose.disconnect();
   });
 
-  // TEST HOMEPAGE-------------------------
-  describe("/homepage", () => {
-    it("GET all endpoints", () => {
+  // HOMEPAGE-------------------------
+  describe("/api", () => {
+    it("GET html of all endpoints", () => {
+      return request.get("/api").expect(200);
+    });
+    it("GET responds with status 404 and page not found for invalid address", () => {
       return request
-        .get("/homepage")
-        .expect(200)
+        .get("/apiaddress")
+        .expect(404)
         .then(res => {
-          expect(res.body).to.have.keys("message");
+          expect(res.body.message).to.equal("Page Not Found");
         });
     });
   });
@@ -49,6 +52,14 @@ describe("Test_NC_News", () => {
             "__v"
           );
           expect(res.body.topics[0]._id).to.equal(`${topicsDocs[0]._id}`);
+        });
+    });
+    it("GET responds with 404 and page not found for invalid address", () => {
+      return request
+        .get("/api/topicaddress")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Page Not Found");
         });
     });
   });
@@ -77,12 +88,20 @@ describe("Test_NC_News", () => {
           expect(`${usernames[0]}`).to.equal(res.body.articles[0].created_by);
         });
     });
+    it("GET responds with 404 and page not found for valid request that is not in the database", () => {
+      return request
+        .get("/api/topics/notASlug/articles")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Page Not Found");
+        });
+    });
     it("POST article with a specified topic", () => {
       return request
         .post(`/api/topics/${topicsDocs[1].slug}/articles`)
         .send({
           title: "Moongoose or not to moongoose",
-          body: "A great man once said moongooes, and I agree",
+          body: "A great man once said moongoose, and I agree",
           belongs_to: "cats",
           votes: 0
         })
@@ -102,6 +121,30 @@ describe("Test_NC_News", () => {
             "Moongoose or not to moongoose"
           );
         });
+    });
+    it("POST returns 404 page not found, correct data sent to wrong address", () => {
+      return request
+        .post(`/api/topics/${topicsDocs[1].slug}/articlesssss`)
+        .send({
+          title: "Moongoose or not to moongoose",
+          body: "A great man once said moongoose, and I agree",
+          belongs_to: "cats",
+          votes: 0
+        })
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Page Not Found");
+        });
+    });
+    it("POST returns 400 bad request for not satisfying protocols", () => {
+      return request
+        .post(`/api/topics/${topicsDocs[1].slug}/articles`)
+        .send({
+          body: "A great man once said moongoose, and I agree",
+          belongs_to: "cats",
+          votes: 0
+        })
+        .expect(400);
     });
   });
   // Articles--------------------------------------------------
@@ -126,6 +169,14 @@ describe("Test_NC_News", () => {
           expect(articlesDocs[0]._id.equals(res.body.articles[0]._id));
         });
     });
+    it("GET returns 404 for incorrect address", () => {
+      return request
+        .get("/api/wrongAddress")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Page Not Found");
+        });
+    });
   });
   describe("/api/articles/:article_id", () => {
     it("GET returns articles with aritcle_id", () => {
@@ -146,6 +197,14 @@ describe("Test_NC_News", () => {
           expect(articlesDocs[2]._id.equals(res.body.articles._id));
         });
     });
+    it("GET returns 404 for articles that does not exist", () => {
+      return request
+        .get(`/api/articles/${articlesDocs[2]._id}plusSomeMoreStuff`)
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Page Not Found");
+        });
+    });
     it("PUT increment the votes on an article by 1", () => {
       return request
         .put(`/api/articles/${articlesDocs[1]._id}?vote=up`)
@@ -163,6 +222,14 @@ describe("Test_NC_News", () => {
         .then(res => {
           expect(res.body).to.have.keys("article");
           expect(res.body.article.votes).to.equal(articlesDocs[1].votes - 1);
+        });
+    });
+    it("PUT returns 404 page not found for incorrect id", () => {
+      return request
+        .put(`/api/articles/${articlesDocs[1]._id}1234?vote=down`)
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.have.equal("Page Not Found");
         });
     });
   });
@@ -231,6 +298,14 @@ describe("Test_NC_News", () => {
         .then(res => {
           expect(res.body).to.have.keys("comment");
           expect(res.body.comment.votes).to.equal(commentsDocs[3].votes - 1);
+        });
+    });
+    it.only("PUT 404 page not found when using id not in db", () => {
+      return request
+        .put("/api/comments/5b2ffd7553e9f32ff1eb13b7?vote=down")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Page Not Found");
         });
     });
   });

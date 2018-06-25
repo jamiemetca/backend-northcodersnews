@@ -44,8 +44,12 @@ const updateVoteByCommentId = (req, res, next) => {
   Comment.findById({ _id })
     .lean()
     .then(comment => {
+      if (comment === null) {
+        return next({ status: 404, message: "Page Not Found" });
+      }
       let updatedVotes = comment.votes;
-      vote === "up" ? updatedVotes++ : updatedVotes--;
+      if (vote === "up") updatedVotes++;
+      else if (vote === "down") updatedVotes--;
       return Comment.findByIdAndUpdate({ _id }, { votes: updatedVotes });
     })
     .then(() => {

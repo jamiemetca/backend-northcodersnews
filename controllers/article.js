@@ -18,7 +18,11 @@ const getArticleByTopicSlug = (req, res, next) => {
         article.count = countArr[index];
         return article;
       });
-      res.send({ articles });
+      articles === undefined || articles.length === 0
+        ? next({ status: 404, message: `Page Not Found for ${belongs_to}` })
+        : res.send({
+            articles
+          });
     })
     .catch(next);
 };
@@ -91,7 +95,8 @@ const updateVoteByArticleId = (req, res, next) => {
     .lean()
     .then(article => {
       let updatedVotes = article.votes;
-      vote === "up" ? updatedVotes++ : updatedVotes--;
+      if (vote === "up") updatedVotes++;
+      else if (vote === "down") updatedVotes--;
       return Article.findByIdAndUpdate({ _id }, { votes: updatedVotes });
     })
     .then(() => {
