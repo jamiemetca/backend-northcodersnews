@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { DB_URL } = require("./config");
+const { DB_URL } = require("../config");
 const bodyParser = require("body-parser");
-const { apiRouter } = require("./routes/api");
+const { apiRouter } = require("../routes/api");
 
 app.use(bodyParser.json());
 
