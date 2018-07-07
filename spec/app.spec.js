@@ -63,7 +63,7 @@ describe("Test_NC_News", () => {
         });
     });
   });
-  describe("/api/topics/:topic_slug/articles", () => {
+  describe("/api/topics/:belongs_to/articles", () => {
     it("GET articels by topic slug (keyword)", () => {
       return request
         .get(`/api/topics/${topicsDocs[0].slug}/articles`)

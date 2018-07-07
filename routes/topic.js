@@ -8,7 +8,8 @@ const {
 topicRouter.route("/").get(getTopics);
 
 topicRouter
-  .route("/:topic_slug/articles")
+  .route("/:belongs_to/articles")
+  // change the route to /:belongs_to/articles
   .get(getArticleByTopicSlug)
   .post(postArticleByTopicSlug);
 

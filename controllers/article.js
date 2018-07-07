@@ -1,15 +1,19 @@
 const { Article, Comment, User } = require("../models");
 
 const getArticleByTopicSlug = (req, res, next) => {
-  const { topic_slug: belongs_to } = req.params;
-  Article.find({ belongs_to })
+  const { belongs_to } = req.params;
+  Article.find({
+    belongs_to
+  })
     .populate("users")
     .lean()
     .then(articles => {
       return Promise.all([
         articles,
         ...articles.map(article => {
-          return Comment.count({ belongs_to: article._id });
+          return Comment.count({
+            belongs_to: article._id
+          });
         })
       ]);
     })
@@ -19,7 +23,10 @@ const getArticleByTopicSlug = (req, res, next) => {
         return article;
       });
       articles === undefined || articles.length === 0
-        ? next({ status: 404, message: `Page Not Found for ${belongs_to}` })
+        ? next({
+            status: 404,
+            message: `Page Not Found for ${belongs_to}`
+          })
         : res.send({
             articles
           });
@@ -29,7 +36,7 @@ const getArticleByTopicSlug = (req, res, next) => {
 
 const postArticleByTopicSlug = (req, res, next) => {
   const { title, body, votes } = req.body;
-  const { topic_slug: belongs_to } = req.params;
+  const { belongs_to } = req.params;
   User.find()
     .then(users => {
       const newArticle = {
@@ -89,18 +96,14 @@ const getArticlesById = (req, res, next) => {
 };
 
 const updateVoteByArticleId = (req, res, next) => {
-  const { article_id: _id } = req.params;
+  const { article_id } = req.params;
   const { vote } = req.query;
-  Article.findById({ _id })
-    .lean()
-    .then(article => {
-      let updatedVotes = article.votes;
-      if (vote === "up") updatedVotes++;
-      else if (vote === "down") updatedVotes--;
-      return Article.findByIdAndUpdate({ _id }, { votes: updatedVotes });
-    })
+  let updatedVotes = 0;
+  if (vote === "up") updatedVotes++;
+  else if (vote === "down") updatedVotes--;
+  Article.update({ _id: article_id }, { $inc: { votes: updatedVotes } })
     .then(() => {
-      return Article.findById({ _id });
+      return Article.findById(article_id);
     })
     .then(article => {
       res.status(200).send({ article });

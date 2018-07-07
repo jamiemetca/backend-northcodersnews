@@ -29,12 +29,12 @@
       </p>
       <br>
       <p>
-        GET /api/topics/:topic_slug/articles
+        GET /api/topics/:belongs_to/articles
         <br> Return all the articles for a certain topic
       </p>
       <br>
       <p>
-        POST /api/topics/:topic_slug/articles
+        POST /api/topics/:belongs_to/articles
         <br> Add a new article to a topic. This route requires a JSON body with title and body key value pairs e.g: { "title":
         "new article", "body": "This is my new article content"}
       </p>

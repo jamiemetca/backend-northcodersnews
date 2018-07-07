@@ -14,10 +14,6 @@ mongoose
   })
   .catch(console.log);
 
-// app.get("/homepage", (req, res, next) => {
-//   res.send({ message: "Homepage" });
-// });
-
 app.use("/api", apiRouter);
 
 app
@@ -26,12 +22,11 @@ app
     next({ status: 404, message: "Page Not Found" });
   })
   .post((req, res, next) => {
-    next({ status: 404, message: `Bad Request` });
+    next({ status: 400, message: `Bad Request` });
   });
 
 app.use((err, req, res, next) => {
-  // console.log(err);
-  // console.log(err.message);
+  console.log(err);
   err.name === "CastError"
     ? res.status(404).send({ message: "Page Not Found" })
     : err.name === "ValidationError" || err.name === "SyntaxError"
