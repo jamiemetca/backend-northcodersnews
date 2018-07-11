@@ -4,11 +4,14 @@ const { articleRouter } = require("./article");
 const { commentsRouter } = require("./comment");
 const { userRouter } = require("./user");
 
-apiRouter.get("/", (req, res, next) => {
-  res.sendFile(
-    "/Users/jamiemetcalfe/Coding/Northcoders/sprint/backEndTwo/BE-FT-northcoders-news/public/api.html"
-  );
-});
+// apiRouter.get("/", (req, res, next) => {
+//   res.sendFile(
+//     "/Users/jamiemetcalfe/Coding/Northcoders/sprint/backEndTwo/BE-FT-northcoders-news/public/api.html"
+//   );
+// });
+
+// app.use(express.static('public'))
+apiRouter.use('/api', express.static('public'))
 
 apiRouter.use("/topics", topicRouter);
 apiRouter.use("/articles", articleRouter);
