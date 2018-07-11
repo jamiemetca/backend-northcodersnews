@@ -10,7 +10,7 @@ const { userRouter } = require("./user");
 //   );
 // });
 
-apiRouter.use('/', express.static('public'))
+// apiRouter.use('/', express.static('public')) 
 
 apiRouter.use("/topics", topicRouter);
 apiRouter.use("/articles", articleRouter);
