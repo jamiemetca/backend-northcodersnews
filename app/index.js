@@ -7,6 +7,8 @@ const { apiRouter } = require("../routes/api");
 
 app.use(bodyParser.json());
 
+app.use(cors())
+
 mongoose
   .connect(DB_URL)
   .then(() => {
