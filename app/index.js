@@ -14,7 +14,7 @@ mongoose
   })
   .catch(console.log);
 
-app.use('/api', express.static('public'))
+app.use('/api', app.static('public'))
 
 app.use("/api", apiRouter);
 
