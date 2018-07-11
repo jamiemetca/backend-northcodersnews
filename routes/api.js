@@ -3,7 +3,6 @@ const { topicRouter } = require("./topic");
 const { articleRouter } = require("./article");
 const { commentsRouter } = require("./comment");
 const { userRouter } = require("./user");
-const { app } = require('../app')
 
 // apiRouter.get("/", (req, res, next) => {
 //   res.sendFile(
@@ -11,7 +10,7 @@ const { app } = require('../app')
 //   );
 // });
 
-apiRouter.use('/', app.static('public'))
+apiRouter.use('/', express.static('public'))
 
 apiRouter.use("/topics", topicRouter);
 apiRouter.use("/articles", articleRouter);
