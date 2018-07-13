@@ -5,7 +5,7 @@ const getArticleByTopicSlug = (req, res, next) => {
   Article.find({
     belongs_to
   })
-    .populate("users")
+    .populate("created_by")
     .lean()
     .then(articles => {
       return Promise.all([
@@ -24,12 +24,12 @@ const getArticleByTopicSlug = (req, res, next) => {
       });
       articles === undefined || articles.length === 0
         ? next({
-            status: 404,
-            message: `Page Not Found for ${belongs_to}`
-          })
+          status: 404,
+          message: `Page Not Found for ${belongs_to}`
+        })
         : res.send({
-            articles
-          });
+          articles
+        });
     })
     .catch(next);
 };
@@ -57,6 +57,7 @@ const postArticleByTopicSlug = (req, res, next) => {
 
 const getArticles = (req, res, next) => {
   Article.find()
+    .populate('created_by')
     .lean()
     .then(articles => {
       return Promise.all([
@@ -84,11 +85,12 @@ const getArticlesById = (req, res, next) => {
   const param = {
     _id: req.params.article_id
       ? {
-          $in: req.params.article_id
-        }
+        $in: req.params.article_id
+      }
       : { $exists: true }
   };
   Article.find(param)
+    .populate('created_by')
     .then(articles => {
       res.send({ articles });
     })

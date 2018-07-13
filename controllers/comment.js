@@ -3,9 +3,10 @@ const { Comment } = require("../models");
 const getCommentsByArticleId = (req, res, next) => {
   const { article_id: belongs_to } = req.params;
   Comment.find({ belongs_to })
-    .populate("created_by", "username")
+    .populate("created_by")
     .lean()
     .then(comments => {
+      console.log(comments)
       return Promise.all([
         comments,
         ...comments.map(comment => {
